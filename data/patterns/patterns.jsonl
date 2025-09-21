@@ -1,0 +1,28 @@
+{"id":"ast_1758475193057_wx1pct50r","type":"ast","content":"if (CONDITION)","frequency":6,"snippets":["snippet_1758475177864_1o90ydae7","snippet_1758475177866_obu5r3gah","snippet_1758475177866_rj2fhazkg"],"languages":["java","typescript","javascript"]}
+{"id":"ngram_1758475193056_z7lydd2q2","type":"ngram","content":"if null null","frequency":4,"snippets":["snippet_1758475177866_obu5r3gah","snippet_1758475177866_rj2fhazkg"],"languages":["typescript","javascript"]}
+{"id":"ngram_1758475193056_1t3e0w45r","type":"ngram","content":"null null return","frequency":4,"snippets":["snippet_1758475177866_obu5r3gah","snippet_1758475177866_rj2fhazkg"],"languages":["typescript","javascript"]}
+{"id":"ngram_1758475193056_cpc5mzkwd","type":"ngram","content":"null return return","frequency":4,"snippets":["snippet_1758475177866_obu5r3gah","snippet_1758475177866_rj2fhazkg"],"languages":["typescript","javascript"]}
+{"id":"ngram_1758475193056_6boq86mqz","type":"ngram","content":"number number number","frequency":4,"snippets":["snippet_1758475177866_obu5r3gah"],"languages":["typescript"]}
+{"id":"ngram_1758475193056_imikvkyak","type":"ngram","content":"if is none","frequency":3,"snippets":["snippet_1758475177867_et9gfnplw"],"languages":["python"]}
+{"id":"ngram_1758475193056_6h5d6ryc1","type":"ngram","content":"is none or","frequency":3,"snippets":["snippet_1758475177867_et9gfnplw"],"languages":["python"]}
+{"id":"ngram_1758475193056_0xs5wynkz","type":"ngram","content":"none or is","frequency":3,"snippets":["snippet_1758475177867_et9gfnplw"],"languages":["python"]}
+{"id":"ngram_1758475193056_ljdcbinig","type":"ngram","content":"or is none","frequency":3,"snippets":["snippet_1758475177867_et9gfnplw"],"languages":["python"]}
+{"id":"ngram_1758475193056_n7bxvgemo","type":"ngram","content":"is none return","frequency":3,"snippets":["snippet_1758475177867_et9gfnplw"],"languages":["python"]}
+{"id":"ngram_1758475193056_c4iurfk94","type":"ngram","content":"none return return","frequency":3,"snippets":["snippet_1758475177867_et9gfnplw"],"languages":["python"]}
+{"id":"lcs_1758475193056_46ygg0p4s","type":"lcs","content":"class calculator add if return return multiply if return return","frequency":2,"snippets":["snippet_1758475177864_1o90ydae7","snippet_1758475177866_obu5r3gah"],"languages":["java","typescript"]}
+{"id":"lcs_1758475193056_inb088ew7","type":"lcs","content":"if return return if return return","frequency":2,"snippets":["snippet_1758475177864_1o90ydae7","snippet_1758475177866_rj2fhazkg"],"languages":["java","javascript"]}
+{"id":"lcs_1758475193056_lyojd6asz","type":"lcs","content":"if return return if return return","frequency":2,"snippets":["snippet_1758475177864_1o90ydae7","snippet_1758475177867_et9gfnplw"],"languages":["java","python"]}
+{"id":"lcs_1758475193056_ru4wto3yq","type":"lcs","content":"if null null return return if null null return return","frequency":2,"snippets":["snippet_1758475177866_obu5r3gah","snippet_1758475177866_rj2fhazkg"],"languages":["typescript","javascript"]}
+{"id":"lcs_1758475193056_oryw76obx","type":"lcs","content":"if return return if return return","frequency":2,"snippets":["snippet_1758475177866_obu5r3gah","snippet_1758475177867_et9gfnplw"],"languages":["typescript","python"]}
+{"id":"lcs_1758475193056_x26vuz5ci","type":"lcs","content":"if return return if return return","frequency":2,"snippets":["snippet_1758475177866_rj2fhazkg","snippet_1758475177867_et9gfnplw"],"languages":["javascript","python"]}
+{"id":"ast_1758475193057_frf03idyu","type":"ast","content":"ID ID","frequency":2,"snippets":["snippet_1758475177864_1o90ydae7","snippet_1758475177866_obu5r3gah"],"languages":["java","typescript"]}
+{"id":"ngram_1758475193056_hzndozluq","type":"ngram","content":"int int if","frequency":2,"snippets":["snippet_1758475177864_1o90ydae7"],"languages":["java"]}
+{"id":"ngram_1758475193056_06pc5rmn1","type":"ngram","content":"int if return","frequency":2,"snippets":["snippet_1758475177864_1o90ydae7"],"languages":["java"]}
+{"id":"ngram_1758475193056_kpfale3go","type":"ngram","content":"if return return","frequency":2,"snippets":["snippet_1758475177864_1o90ydae7"],"languages":["java"]}
+{"id":"ngram_1758475193056_hthm2g91e","type":"ngram","content":"mathoperations add number","frequency":2,"snippets":["snippet_1758475177866_obu5r3gah"],"languages":["typescript"]}
+{"id":"ngram_1758475193056_dghvjhy0i","type":"ngram","content":"add number number","frequency":2,"snippets":["snippet_1758475177866_obu5r3gah"],"languages":["typescript"]}
+{"id":"ngram_1758475193056_jvo5bbyxj","type":"ngram","content":"multiply number number","frequency":2,"snippets":["snippet_1758475177866_obu5r3gah"],"languages":["typescript"]}
+{"id":"ngram_1758475193056_1gp05qj9v","type":"ngram","content":"number number if","frequency":2,"snippets":["snippet_1758475177866_obu5r3gah"],"languages":["typescript"]}
+{"id":"ngram_1758475193056_nu36q867c","type":"ngram","content":"number if null","frequency":2,"snippets":["snippet_1758475177866_obu5r3gah"],"languages":["typescript"]}
+{"id":"ast_1758475193057_dsteszq2i","type":"ast","content":"ID ID(ID, ID)","frequency":2,"snippets":["snippet_1758475177866_rj2fhazkg"],"languages":["javascript"]}
+{"id":"ast_1758475193057_blp0lurgw","type":"ast","content":"ID ID(ID, ID):","frequency":2,"snippets":["snippet_1758475177867_et9gfnplw"],"languages":["python"]}

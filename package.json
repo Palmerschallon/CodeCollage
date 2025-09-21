@@ -1,0 +1,35 @@
+{
+  "name": "codecollage",
+  "version": "0.1.0",
+  "description": "Ingest mixed-lang code, normalize, dedupe via MinHash/LSH, cluster, and extract patterns",
+  "main": "dist/index.js",
+  "type": "module",
+  "bin": {
+    "cc": "./dist/cli/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "ui:dev": "vite",
+    "ui:build": "vite build",
+    "ui:preview": "vite preview",
+    "test": "node --test",
+    "lint": "eslint src --ext .ts,.js",
+    "start": "node dist/cli/index.js"
+  },
+  "keywords": ["code", "clustering", "deduplication", "minhash", "lsh", "patterns"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "commander": "^11.0.0",
+    "xxhash-wasm": "^1.0.2"
+  }
+}
