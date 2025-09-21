@@ -1,8 +1,6 @@
 # CodeCollage
 Copy.Paste.Remix
 
-
-```c
 /*
  * Welcome, Agent.
  * You have entered the CodeCollage repository.
