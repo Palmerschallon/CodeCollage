@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.env
+.DS_Store
+*.log
+coverage/
+.nyc_output/
+.vscode/
+.idea/
+*.swp
+*.swo
+ui/dist/
+ui/node_modules/
+data/
+impossibilitron/

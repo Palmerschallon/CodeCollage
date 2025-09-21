@@ -1,0 +1,40 @@
+{
+  "name": "codecollage",
+  "version": "0.1.0",
+  "description": "Copy.Paste.Remix - Code ingestion, clustering, and pattern extraction",
+  "type": "module",
+  "bin": {
+    "cc": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc && npm run build:ui",
+    "build:ui": "cd ui && npm run build",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:ui\"",
+    "dev:backend": "tsx --watch src/cli.ts",
+    "dev:ui": "cd ui && npm run dev",
+    "test": "vitest",
+    "lint": "eslint src/**/*.ts ui/src/**/*.ts",
+    "serve": "node dist/cli.js serve",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@types/node": "^20.0.0",
+    "commander": "^11.0.0",
+    "express": "^4.18.0",
+    "cors": "^2.8.5",
+    "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.0",
+    "@types/cors": "^2.8.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "concurrently": "^8.0.0",
+    "eslint": "^8.0.0",
+    "tsx": "^4.0.0",
+    "vitest": "^1.0.0"
+  },
+  "keywords": ["code", "clustering", "patterns", "deduplication", "analysis"],
+  "author": "CodeCollage",
+  "license": "MIT"
+}

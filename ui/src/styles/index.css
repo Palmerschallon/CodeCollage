@@ -1,0 +1,364 @@
+/* Brutalist CodeCollage UI Styles */
+
+:root {
+  --black: #000000;
+  --white: #ffffff;
+  --accent: #ff0000;
+  --gray-light: #f5f5f5;
+  --gray-dark: #333333;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-sans: 'Inter', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--white);
+  color: var(--black);
+  line-height: 1.4;
+  overflow-x: hidden;
+}
+
+/* Brutalist Layout */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.header {
+  background: var(--black);
+  color: var(--white);
+  padding: 1rem 2rem;
+  border-bottom: 4px solid var(--accent);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header h1 {
+  font-size: 2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+.header .tagline {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  opacity: 0.8;
+}
+
+/* Navigation */
+.nav {
+  display: flex;
+  gap: 0;
+  margin-top: 1rem;
+}
+
+.nav-item {
+  background: var(--white);
+  color: var(--black);
+  border: 2px solid var(--black);
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  transition: all 0.1s ease;
+  border-right: none;
+}
+
+.nav-item:last-child {
+  border-right: 2px solid var(--black);
+}
+
+.nav-item:hover,
+.nav-item.active {
+  background: var(--accent);
+  color: var(--white);
+  transform: translateY(-2px);
+  box-shadow: 4px 4px 0 var(--black);
+}
+
+/* Main Content */
+.main {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Grid Layout */
+.cluster-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+/* Cluster Cards */
+.cluster-card {
+  border: 3px solid var(--black);
+  background: var(--white);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.cluster-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 8px 8px 0 var(--black);
+}
+
+.cluster-header {
+  background: var(--black);
+  color: var(--white);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cluster-title {
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.cluster-size {
+  background: var(--accent);
+  color: var(--white);
+  padding: 0.25rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.cluster-preview {
+  padding: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  background: var(--gray-light);
+  border-top: 2px solid var(--black);
+  max-height: 200px;
+  overflow: hidden;
+  position: relative;
+}
+
+.cluster-preview::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: linear-gradient(transparent, var(--gray-light));
+}
+
+/* Code Display */
+.code-block {
+  font-family: var(--font-mono);
+  background: var(--black);
+  color: var(--white);
+  padding: 1rem;
+  border: 3px solid var(--black);
+  margin: 1rem 0;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.code-block .line-number {
+  color: var(--accent);
+  margin-right: 1rem;
+  user-select: none;
+}
+
+/* Stats Panel */
+.stats-panel {
+  background: var(--gray-light);
+  border: 3px solid var(--black);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--accent);
+  display: block;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-top: 0.25rem;
+}
+
+/* Patterns */
+.pattern-list {
+  list-style: none;
+}
+
+.pattern-item {
+  border: 2px solid var(--black);
+  margin-bottom: 0.5rem;
+  padding: 1rem;
+  background: var(--white);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pattern-content {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  flex: 1;
+}
+
+.pattern-meta {
+  font-size: 0.75rem;
+  color: var(--gray-dark);
+  text-align: right;
+}
+
+.pattern-frequency {
+  background: var(--accent);
+  color: var(--white);
+  padding: 0.25rem 0.5rem;
+  margin-left: 0.5rem;
+  font-weight: 700;
+}
+
+/* Buttons */
+.btn {
+  background: var(--black);
+  color: var(--white);
+  border: 2px solid var(--black);
+  padding: 0.75rem 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  font-size: 0.875rem;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  background: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 4px 4px 0 var(--black);
+}
+
+.btn-secondary {
+  background: var(--white);
+  color: var(--black);
+}
+
+.btn-secondary:hover {
+  background: var(--gray-light);
+}
+
+/* Loading States */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.loading::after {
+  content: '...';
+  animation: dots 1.5s infinite;
+}
+
+@keyframes dots {
+  0%, 20% { content: '.'; }
+  40% { content: '..'; }
+  60%, 100% { content: '...'; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main {
+    padding: 1rem;
+  }
+  
+  .cluster-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .nav {
+    flex-wrap: wrap;
+  }
+  
+  .header {
+    padding: 1rem;
+  }
+  
+  .header h1 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Impossibilitron Styles */
+.impossibilitron {
+  background: var(--black);
+  color: var(--white);
+  border: 4px solid var(--accent);
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+.impossibilitron h2 {
+  color: var(--accent);
+  text-transform: uppercase;
+  font-weight: 900;
+  margin-bottom: 1rem;
+}
+
+.impossibilitron .description {
+  font-family: var(--font-mono);
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+  opacity: 0.9;
+}
+
+/* Search/Filter */
+.search-bar {
+  width: 100%;
+  padding: 1rem;
+  border: 3px solid var(--black);
+  font-size: 1rem;
+  font-family: var(--font-mono);
+  background: var(--white);
+  margin-bottom: 1rem;
+}
+
+.search-bar:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 4px 4px 0 var(--black);
+}
