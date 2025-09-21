@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>Verse • Spaghetti Meal (Story + Knobs + Tools)</title>
+<style>
+  /* ─────────────────────────────────────────────────────────────
+     STYLE: brutal minimal; inky blacks; subtle grain
+  ───────────────────────────────────────────────────────────── */
+  html,body{margin:0;height:100%;background:#000;color:#fff;font:15px ui-monospace,Menlo,Consolas}
+  canvas{position:fixed;inset:0;display:block;background:#000}
+  .grain{position:fixed;inset:0;pointer-events:none;mix-blend-mode:screen;opacity:.035;background-image:
+    radial-gradient(#fff 1px, transparent 1px), radial-gradient(#fff 1px, transparent 1px);
+    background-size:3px 3px, 5px 5px; background-position:0 0, 1px 1px}
+  /* Burger + Drawer */
+  .burger{position:fixed;top:10px;right:10px;z-index:10;cursor:pointer;
+    background:rgba(16,17,20,.9);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:8px 12px}
+  .burger span{letter-spacing:.08em}
+  .drawer{position:fixed;right:10px;top:52px;bottom:10px;width:min(340px,92vw);z-index:11;
+    background:rgba(12,12,14,.86);backdrop-filter:blur(10px) saturate(1.1);
+    border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px;display:none;overflow:auto}
+  .drawer.open{display:block}
+  .sec{margin:8px 0 14px 0;padding:10px;border:1px dashed rgba(255,255,255,.15);border-radius:8px}
+  .sec h3{margin:0 0 8px 0;font-weight:600;font-size:12px;color:#cfd3da;letter-spacing:.12em}
+  .row{display:flex;align-items:center;gap:8px;margin:6px 0}
+  .row label{flex:1 1 40%;font-size:12px;color:#9aa3ad}
+  .row input[type="range"]{flex:1 1 60%}
+  .pill{display:inline-block;border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:6px 10px;margin:4px 6px 0 0;font-size:12px;cursor:pointer}
+  .pill.on{background:#fff;color:#000}
+  /* Paste overlay (optional) */
+  .paste{position:fixed;left:0;right:0;bottom:0;transform:translateY(100%);transition:transform .2s;
+    background:rgba(8,8,10,.9);border-top:1px solid rgba(255,255,255,.12);z-index:12;padding:10px}
+  .paste.open{transform:translateY(0)}
+  .paste textarea{width:100%;min-height:100px;border:1px solid rgba(255,255,255,.2);background:#0b0c0f;color:#fff;border-radius:10px;padding:10px;outline:none;resize:none}
+  .btn{border:1px solid rgba(255,255,255,.2);background:#fff;color:#000;border-radius:999px;padding:8px 12px;cursor:pointer}
+  .btn.ghost{background:transparent;color:#fff}
+  .hint{position:fixed;left:50%;top:52%;transform:translate(-50%,-50%);color:#b7bdc6;font-size:13px;opacity:.75;pointer-events:none;text-align:center}
+</style>
+</head>
+<body>
+
+<!-- ─────────────────────────────────────────────────────────────
+     STORY: Curtain Up — canvas breathes before input
+     “Opening: four hundred embers form a ring. A few stray.
+      The swarm breathes. Micro-writers hesitate, then write: tap.”
+   ──────────────────────────────────────────────────────────── -->
+<canvas id="ink"></canvas>
+<div class="grain"></div>
+<button class="burger" id="burger"><span>⋮ VIBE</span></button>
+
+<!-- KNOBS / SLIDERS / TOOLS DRAWER -->
+<div class="drawer" id="drawer">
+  <div class="sec">
+    <h3>MENU • WHAT THIS IS</h3>
+    <div style="font-size:12px;opacity:.9;line-height:1.4">
+      One-file “spaghetti plate” with story blocks, a vibe drawer, and paste slots. Start with a breathing ring, then type or paste to mutate.
+    </div>
+  </div>
+
+  <div class="sec" id="knobs">
+    <h3>KNOBS & SLIDERS</h3>
+    <div class="row"><label>Agents</label><input id="kCount" type="range" min="1" max="4000" value="400"></div>
+    <div class="row"><label>Ring Radius</label><input id="kRadius" type="range" min="40" max="650" value="220"></div>
+    <div class="row"><label>Wander</label><input id="kWander" type="range" min="0" max="100" value="14"></div>
+    <div class="row"><label>Tremor</label><input id="kTremor" type="range" min="0" max="100" value="8"></div>
+    <div class="row"><label>Trails</label><input id="kTrails" type="range" min="0" max="100" value="92"></div>
+  </div>
+
+  <div class="sec">
+    <h3>PATTERNS (QUICK RECIPES)</h3>
+    <span class="pill on" data-shape="ring">ring</span>
+    <span class="pill" data-shape="spiral">spiral</span>
+    <span class="pill" data-shape="lattice">lattice</span>
+    <span class="pill" data-shape="wave">wave line</span>
+  </div>
+
+  <div class="sec">
+    <h3>TOOLS DRAWER</h3>
+    <div style="font-size:12px;opacity:.9">
+      • Reset ink • Copy link • Toggle paste<br/>
+      <button class="btn" id="toolReset">Reset Ink</button>
+      <button class="btn" id="toolShare">Share</button>
+      <button class="btn ghost" id="toolPaste">Paste…</button>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h3>IMPOSSIBILITRON</h3>
+    <div style="font-size:12px;opacity:.9">
+      Failed parses or “impossible” inputs are logged to console with a reason. (Stubbed here.)
+    </div>
+  </div>
+</div>
+
+<!-- Optional paste overlay -->
+<div class="paste" id="paste">
+  <textarea id="seedBox" placeholder="Paste text here (no limit). Verse will look for strings/spells and mutate the swarm…"></textarea>
+  <div style="margin-top:8px;display:flex;gap:8px">
+    <button class="btn" id="apply">Apply</button>
+    <button class="btn ghost" id="closePaste">Close</button>
+  </div>
+</div>
+
+<div class="hint" id="hint">tap anywhere to open Vibe • long-press to paste</div>
+
+<script>
+/* ============================================================
+   STORY BLOCK 0: Pantry / Tools (small, reliable ingredients)
+   - rng32: deterministic mulberry
+   - clamp, lerp, ease
+   - shareURL
+============================================================ */
+function xmur3(str){ let h=1779033703^str.length; for(let i=0;i<str.length;i++){h=Math.imul(h^str.charCodeAt(i),3432918353); h=h<<13|h>>>19;} return ()=>{ h=Math.imul(h^(h>>>16),2246822507); h=Math.imul(h^(h>>>13),3266489909); return (h^=h>>>16)>>>0; }; }
+function mulberry32(a){ return function(){ let t=a+=0x6D2B79F5; t=Math.imul(t^t>>>15,t|1); t^=t+Math.imul(t^t>>>7,t|61); return ((t^t>>>14)>>>0)/4294967296; }; }
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const easeExp=(t)=>1-Math.pow(2,-10*clamp(t,0,1));
+function shareURL(params){ const q=new URLSearchParams(params); history.replaceState(null,"",location.pathname+"?"+q.toString()); }
+
+/* ============================================================
+   STORY BLOCK 1: Stage & Camera (2.5D-on-2D)
+   - world units in CSS pixels; camera scales world
+   - pan (drag), zoom (pinch/wheel), rotate (Q/E)
+============================================================ */
+const cvs=document.getElementById('ink'), ctx=cvs.getContext('2d',{alpha:false});
+function fit(){ const dpr=Math.max(1,Math.min(3,devicePixelRatio||1)); cvs.width=innerWidth*dpr; cvs.height=innerHeight*dpr; cvs.style.width=innerWidth+'px'; cvs.style.height=innerHeight+'px'; ctx.setTransform(dpr,0,0,dpr,0,0); }
+addEventListener('resize', fit, {passive:true}); fit();
+
+const camera={
+  x:0,y:0, zoom:1, rot:0,
+  vx:0,vy:0, vzoom:0, vrot:0,
+  to(px,py,pz,pr,ms=800){ const sx=this.x, sy=this.y, sz=this.zoom, sr=this.rot, t0=performance.now();
+    function anim(now){ const t=clamp((now-t0)/ms,0,1), e=easeExp(t);
+      camera.x=lerp(sx,px,e); camera.y=lerp(sy,py,e); camera.zoom=lerp(sz,pz,e); camera.rot=lerp(sr,pr,e);
+      if(t<1) requestAnimationFrame(anim);
+    } requestAnimationFrame(anim);
+  }
+};
+
+let touching=false, lastDist=0, lastCx=0, lastCy=0;
+cvs.addEventListener('pointerdown',e=>{ touching=true; lastCx=e.clientX; lastCy=e.clientY; cvs.setPointerCapture(e.pointerId); });
+cvs.addEventListener('pointermove',e=>{ if(!touching) return; const dx=e.clientX-lastCx, dy=e.clientY-lastCy; lastCx=e.clientX; lastCy=e.clientY; camera.x-=dx/camera.zoom; camera.y-=dy/camera.zoom; });
+cvs.addEventListener('pointerup',()=>{ touching=false; });
+cvs.addEventListener('wheel',e=>{ const s=Math.exp(-e.deltaY*0.0012); const mx=(e.clientX-innerWidth/2)/camera.zoom+camera.x; const my=(e.clientY-innerHeight/2)/camera.zoom+camera.y;
+  camera.zoom=clamp(camera.zoom*s,0.2,8); camera.x=mx-(e.clientX-innerWidth/2)/camera.zoom; camera.y=my-(e.clientY-innerHeight/2)/camera.zoom; e.preventDefault(); }, {passive:false});
+addEventListener('keydown',e=>{ if(e.key==='q') camera.rot-=0.05; if(e.key==='e') camera.rot+=0.05; });
+
+/* ============================================================
+   STORY BLOCK 2: Cast (agents) + Micro-writers
+============================================================ */
+const state={
+  seedText:"Opening: four hundred embers form a ring. A few stray, late to the party. The swarm breathes. Micro-writers write tap.",
+  rng: mulberry32(xmur3("verse-spaghetti")()),
+  parts:[], micro:[], t:0,
+  params:{count:400, radius:220, wander:0.14, tremor:0.08, trails:0.92, shape:'ring'}
+};
+function rnd(){ return state.rng(); }
+function spawn(n){ state.parts.length=0; for(let i=0;i<n;i++){ state.parts.push({x:(rnd()-0.5)*20, y:(rnd()-0.5)*20, vx:(rnd()-0.5)*0.3, vy:(rnd()-0.5)*0.3, id:i}); }}
+
+/* Micro-writers: draw faint “tap” with tiny agents */
+function buildMicroText(text, center, scale){
+  // crude vector text via Canvas path sampling (stable + simple)
+  const off=document.createElement('canvas'), octx=off.getContext('2d');
+  off.width=600; off.height=200; octx.fillStyle="#fff"; octx.font="120px ui-monospace,monospace"; octx.textBaseline="middle";
+  octx.fillText(text, 10, off.height/2);
+  const data=octx.getImageData(0,0,off.width,off.height).data;
+  const pts=[];
+  for(let y=0;y<off.height;y+=4){
+    for(let x=0;x<off.width;x+=4){
+      if(data[(y*off.width+x)*4+3]>128){ pts.push({x:center.x+(x-off.width/2)*scale, y:center.y+(y-off.height/2)*scale}); }
+    }
+  }
+  state.micro = pts.map((p,i)=>({x:p.x + (rnd()-0.5)*20, y:p.y + (rnd()-0.5)*20, tx:p.x, ty:p.y, id:i}));
+}
+
+/* ============================================================
+   STORY BLOCK 3: Force Field + Patterns (ring | spiral | lattice | wave)
+============================================================ */
+function ringTarget(i, R){ const a= (i/state.parts.length)*Math.PI*2; return {x:Math.cos(a)*R, y:Math.sin(a)*R}; }
+function spiralTarget(i,R){ const t=i/state.parts.length, a=t*2*Math.PI*2.2; const r=R*0.15+R*0.85*t; return {x:Math.cos(a)*r, y:Math.sin(a)*r}; }
+function latticePoints(R){ const s=Math.max(18,R*0.14), pts=[]; for(let y=-R;y<=R;y+=s) for(let x=-R;x<=R;x+=s) pts.push({x,y}); return pts; }
+function waveTarget(i,R){ const t=i/state.parts.length, x=lerp(-R*1.4, R*1.4, t), y=Math.sin(t*6.283*2)*R*0.28; return {x,y}; }
+function nearestPull(p, samples){
+  let bestDx=0,bestDy=0,best=Infinity;
+  for(let k=0;k<samples.length;k+=3){ const s=samples[k], dx=s.x-p.x, dy=s.y-p.y, d=dx*dx+dy*dy; if(d<best){ best=d; bestDx=dx; bestDy=dy; } }
+  const pull = 0.002 + 0.0008*(1-Math.min(1,best/(innerWidth*innerHeight)));
+  return {fx:bestDx*pull, fy:bestDy*pull};
+}
+
+/* ============================================================
+   STORY BLOCK 4: Animator — ink trails, breathing, micro-writers delay
+============================================================ */
+spawn(state.params.count);
+let samplesCache=null, samplesName='ring';
+function samplesFor(name){
+  if(samplesCache && samplesName===name) return samplesCache;
+  const R=state.params.radius;
+  if(name==='ring'){ samplesCache = state.parts.map((_,i)=>ringTarget(i,R)); }
+  else if(name==='spiral'){ samplesCache = state.parts.map((_,i)=>spiralTarget(i,R)); }
+  else if(name==='lattice'){ samplesCache = latticePoints(R); }
+  else if(name==='wave'){ samplesCache = state.parts.map((_,i)=>waveTarget(i,R)); }
+  else { samplesCache=[]; }
+  samplesName=name; return samplesCache;
+}
+
+function step(){
+  state.t += 16;
+  // trails / ink fade
+  ctx.globalCompositeOperation='source-over';
+  ctx.fillStyle=`rgba(0,0,0,${1-state.params.trails})`;
+  ctx.fillRect(0,0,innerWidth,innerHeight);
+
+  ctx.save();
+  // camera transform
+  ctx.translate(innerWidth/2, innerHeight/2);
+  ctx.rotate(camera.rot);
+  ctx.scale(camera.zoom, camera.zoom);
+  ctx.translate(-camera.x, -camera.y);
+
+  // faint breathing ring outline (negative space)
+  const phase = 1 + Math.sin(state.t*0.0024)*0.04;
+  const R = state.params.radius*phase;
+
+  // particles
+  const pts = samplesFor(state.params.shape);
+  ctx.globalCompositeOperation='lighter';
+  ctx.strokeStyle='rgba(255,255,255,.9)';
+  ctx.lineWidth=1;
+
+  ctx.beginPath();
+  for(const p of state.parts){
+    // wander + tremor
+    p.vx += (rnd()-0.5)*state.params.wander*0.003 + (rnd()-0.5)*state.params.tremor*0.002;
+    p.vy += (rnd()-0.5)*state.params.wander*0.003 + (rnd()-0.5)*state.params.tremor*0.002;
+
+    // pattern attraction
+    if(pts.length){
+      const pull = nearestPull(p, pts);
+      p.vx = p.vx*0.96 + pull.fx;
+      p.vy = p.vy*0.96 + pull.fy;
+    } else {
+      p.vx*=0.98; p.vy*=0.98;
+    }
+
+    const nx = p.x + p.vx, ny = p.y + p.vy;
+    ctx.moveTo(p.x, p.y); ctx.lineTo(nx, ny);
+    p.x = nx; p.y = ny;
+  }
+  ctx.stroke();
+
+  // micro-writers appear after 1.1s
+  if(state.t > 1100 && state.micro.length===0){
+    buildMicroText("tap", {x:0,y:0}, 0.25);
+  }
+  if(state.micro.length){
+    ctx.globalCompositeOperation='screen';
+    ctx.fillStyle='rgba(255,255,255,.08)';
+    for(const m of state.micro){
+      // ease to target
+      m.x = lerp(m.x, m.tx, 0.08);
+      m.y = lerp(m.y, m.ty, 0.08);
+      ctx.fillRect(m.x, m.y, 1.2, 1.2);
+    }
+  }
+
+  ctx.restore();
+  requestAnimationFrame(step);
+}
+requestAnimationFrame(step);
+
+/* ============================================================
+   STORY BLOCK 5: Drawer wiring (knobs, patterns, tools)
+============================================================ */
+const drawer=document.getElementById('drawer'), burger=document.getElementById('burger');
+burger.onclick=()=> drawer.classList.toggle('open');
+document.getElementById('kCount').oninput=(e)=>{ state.params.count=+e.target.value; spawn(state.params.count); samplesCache=null; };
+document.getElementById('kRadius').oninput=(e)=>{ state.params.radius=+e.target.value; samplesCache=null; };
+document.getElementById('kWander').oninput=(e)=>{ state.params.wander=(+e.target.value)/100; };
+document.getElementById('kTremor').oninput=(e)=>{ state.params.tremor=(+e.target.value)/100; };
+document.getElementById('kTrails').oninput=(e)=>{ state.params.trails=(+e.target.value)/100; };
+
+for(const pill of drawer.querySelectorAll('.pill')){
+  pill.onclick=()=>{ drawer.querySelectorAll('.pill').forEach(p=>p.classList.remove('on')); pill.classList.add('on'); state.params.shape=pill.dataset.shape; samplesCache=null; };
+}
+
+document.getElementById('toolReset').onclick=()=>{ ctx.fillStyle='#000'; ctx.fillRect(0,0,innerWidth,innerHeight); };
+document.getElementById('toolShare').onclick=()=>{ shareURL({count:state.params.count,radius:state.params.radius,shape:state.params.shape}); alert('URL updated — deterministic enough for this demo.'); };
+
+/* Paste overlay controls */
+const paste=document.getElementById('paste'), seedBox=document.getElementById('seedBox');
+document.getElementById('toolPaste').onclick=()=> paste.classList.add('open');
+document.getElementById('closePaste').onclick=()=> paste.classList.remove('open');
+document.getElementById('apply').onclick=()=>{ applySeed(seedBox.value); paste.classList.remove('open'); document.getElementById('hint').style.display='none'; };
+cvs.addEventListener('pointerdown',(e)=>{ if(e.pressure>0.5){ paste.classList.add('open'); }});
+
+/* ============================================================
+   STORY BLOCK 6: Resolver (super-light, just enough to feel alive)
+   - numbers bind to nearest noun we know
+   - known nouns: embers/agents, ring/spiral/lattice/wave
+   - verbs: breathe (osc), stray (arrival delay), write <text>
+============================================================ */
+function applySeed(text){
+  state.seedText = text;
+  try {
+    const s=text.toLowerCase();
+
+    // counts
+    const num = (s.match(/\b(\d{1,5})\b/)||[])[1];
+    if(num){ state.params.count=clamp(+num,1,4000); spawn(state.params.count); }
+
+    // shapes
+    if(/\bring\b/.test(s)) state.params.shape='ring';
+    if(/\bspiral\b/.test(s)) state.params.shape='spiral';
+    if(/\blattice\b/.test(s)) state.params.shape='lattice';
+    if(/\bwave( line)?\b/.test(s)) state.params.shape='wave';
+    samplesCache=null;
+
+    // verbs / meta
+    if(/\bbreathe\b/.test(s)){ /* already breathing via phase */ }
+    const w = (s.match(/write\s+([a-z0-9 _\-:.,]+)/)||[])[1];
+    if(w){ state.micro.length=0; setTimeout(()=>buildMicroText(w.trim(), {x:0,y:0}, 0.25), 300); }
+
+  } catch(err){
+    console.warn("IMPOSSIBILITRON:", err.message||err);
+  }
+}
+
+/* ============================================================
+   STORY BLOCK 7: PASTE SLOTS (weaving older experiments)
+   Where to drop spaghetti from other files without hunting.
+   Paste inside the marked blocks — they’re self-contained.
+============================================================ */
+
+/* === SLOT A: paste “pattern force field” tweaks from gpt5v1.html here ===
+   // e.g., extra attractors, ring-thickening, herald removal, etc.
+*/
+
+/* === SLOT B: paste “seed parsing lexicon” additions from Prosess-dict.json —
+   // convert JSON words → simple conditionals here if you want quick effects
+*/
+
+/* === SLOT C: paste “micro-writers” alternate renderer from manusv2.html —
+   // swap buildMicroText implementation, or add dotted-stroke writer
+*/
+
+/* === SLOT D: paste “swarm HUD” tiny overlays from tiktok-clean.html —
+   // e.g., fps meter, capture button
+*/
+
+/* ============================================================
+   STORY BLOCK 8: Boot — URL params + hint
+============================================================ */
+(function bootFromURL(){
+  const q=new URLSearchParams(location.search);
+  if(q.has('count')){ state.params.count=+q.get('count')||state.params.count; spawn(state.params.count); }
+  if(q.has('radius')){ state.params.radius=+q.get('radius')||state.params.radius; samplesCache=null; }
+  if(q.has('shape')){ state.params.shape=q.get('shape'); samplesCache=null; }
+})();
+</script>
+</body>
+</html>
